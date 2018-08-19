@@ -300,5 +300,24 @@ Then, we type in **my events**, and we hear the list of events.
 
 ![image](https://user-images.githubusercontent.com/8188/44305392-3bbac680-a344-11e8-9660-114e70c02f39.png)
 
+## Logs
 
+You can view the AWS CloudWatch logs from the terminal by running:
 
+```
+$ sls logs -f meetupHandler
+```
+
+## Cleanup
+
+You can delete the Alexa skill, by:
+
+```
+$ sls alexa delete --id <skill_id>
+```
+
+and, you can also cleanup the Lambda function deployment frm AWS, by:
+
+```
+$ sls remove
+```
