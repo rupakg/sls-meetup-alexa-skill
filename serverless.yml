@@ -1,0 +1,55 @@
+service: sls-meetup-alexa-skill
+
+plugins:
+  - serverless-alexa-skills
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-east-1
+  environment:
+    MEETUP_API_KEY: ${env:MEETUP_API_KEY}
+
+custom:
+  alexa:
+    vendorId: ${env:AMAZON_VENDOR_ID}
+    clientId: ${env:AMAZON_CLIENT_ID}
+    clientSecret: ${env:AMAZON_CLIENT_SECRET}
+    localServerPort: 9000
+    skills:
+      - id: <YOUR_SKILL_ID_HERE>
+        manifest:
+          publishingInformation:
+            locales:
+              en-US:
+                name: MeetupEvents
+          apis:
+            custom:
+              endpoint:
+                uri: <YOUR_LAMBDA_FUNCTION_ARB_HERE>
+          manifestVersion: '1.0'
+        models:
+          en-US:
+            interactionModel:
+              languageModel:
+                invocationName: meetup events
+                intents:
+                  - name: MeetupIntent
+                    samples:
+                    - 'my events'
+                    - 'tmy meetup events'
+                    - 'anything interesting in my meetup'
+                    - 'give me all my meetup events'
+                  - name: AMAZON.HelpIntent
+                    samples: []
+                  - name: AMAZON.CancelIntent
+                    samples: []
+                  - name: AMAZON.StopIntent
+                    samples: []
+
+functions:
+  meetupHandler:
+    handler: index.meetupHandler
+    events:
+      - alexaSkill: <YOUR_SKILL_ID_HERE>

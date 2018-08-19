@@ -1,0 +1,19 @@
+{
+  "name": "alexa-meetup-skill",
+  "version": "1.0.0",
+  "description": "Alexa Meetup Skill Package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rupak Ganguly",
+  "license": "MIT",
+  "dependencies": {
+    "ask-sdk-core": "^2.0.7",
+    "ask-sdk-model": "^1.4.1",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "serverless-alexa-skills": "0.0.6"
+  }
+}
