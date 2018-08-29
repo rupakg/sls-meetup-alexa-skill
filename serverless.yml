@@ -38,7 +38,7 @@ custom:
                   - name: MeetupIntent
                     samples:
                     - 'my events'
-                    - 'tmy meetup events'
+                    - 'my meetup events'
                     - 'anything interesting in my meetup'
                     - 'give me all my meetup events'
                   - name: AMAZON.HelpIntent

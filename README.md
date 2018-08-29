@@ -148,7 +148,7 @@ We will now write an interaction model for our skill in the `serverless.yml` fil
                   - name: MeetupIntent
                     samples:
                     - 'my events'
-                    - 'tmy meetup events'
+                    - 'my meetup events'
                     - 'anything interesting in my meetup'
                     - 'give me all my meetup events'
                   - name: AMAZON.HelpIntent
