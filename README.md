@@ -30,14 +30,11 @@ $ sls plugin install -n serverless-alexa-skills
 
 **Login with Amazon** is an OAuth2.0 single sign-on (SSO) system using your Amazon.com account.
 
-To get your credentials, log in to the [Amazon Developer Console](https://developer.amazon.com/), go to **Login with Amazon** from **APPS & SERVICES** menu, and then click on **Create a New Security Profile**.
+Get your credentials, by logging into the [Amazon Developer Console](https://developer.amazon.com/). Then, go to **Login with Amazon** from **APPS & SERVICES** menu, and then click on **Create a New Security Profile**. Then, go to **Web Settings** menu item to create a new security profile.
 
-Go to the **Web Settings** for the new security profile.
+Leave the `Allowed Origins` empty. Enter `http://localhost:9000` in `Allowed Return URLs`. 
 
-`Allowed Origins` can be empty. 
-Enter http://localhost:9000 in `Allowed Return URLs`. 
-
-Write down your `Client ID` and `Client Secret` for the new security profile, as well as `Vendor ID`. You can find your `Vendor ID` at [here](https://developer.amazon.com/mycid.html). You can then set environment variables for each one of these secrets and then reference them in the `serverless.yml` file as shown below:
+Write down your `Client ID`, `Client Secret` and the `Vendor ID` for the new security profile. You can [find](https://developer.amazon.com/mycid.html) your `Vendor ID` as well. You can then set environment variables for each one of these secrets and then reference them in the `serverless.yml` file as shown below:
 
 ```
 custom:
@@ -47,17 +44,12 @@ custom:
     clientSecret: ${env:AMAZON_CLIENT_SECRET}
     localServerPort: 9000
 ```
-**Note**: If you change the port number from the default `3000`, then make sure to add an attribute of `localServerPort` to the `custom` block in the `serverless.yml` file.
 
 ## Authenticating with Amazon
 
 ```
 $ sls alexa auth
 ```
-
-This command opens the  Amazon.com login page in your browser. You will be redirected to `localhost:9000` after authenticating. If the authentication is successful, you'll see the message: "Thank you for using Serverless Alexa Skills Plugin!!".
-
-**Note**: The security token expires in 1 hour. Therefore, if an authentication error occurs, please re-execute the command.
 
 ## Create an Alexa Skill
 
@@ -67,7 +59,7 @@ $ sls alexa create --name $YOUR_SKILL_NAME --locale $YOUR_SKILL_LOCALE --type $Y
 where:
 
 * **name**: Name of the skill
-* **locale**: Locale of the skill (`en-US` for English, `ja-JP` for Japanese etc.)
+* **locale**: Locale of the skill (`en-US` for English)
 * **type**: Type of the skill (`custom` or `smartHome` or `video`)
 
 In our case, to create a new Alexa skill, run:
@@ -100,7 +92,6 @@ manifest:
     custom: {}
   manifestVersion: '1.0'
 ```
-**Note**: If you have other skills present, the info about those skills will be shown as well. 
 
 ## Add Skill Configuration
 
@@ -124,18 +115,17 @@ custom:
             custom: {}              
           manifestVersion: '1.0'
 ```
-For details, check out the [full specs](https://developer.amazon.com/docs/smapi/skill-manifest.html#sample-skill-manifests) for the manifest.
 
-Now, to update the skill, run:
+With the new information added, let's update the skill by running:
 
 ```
 $ sls alexa update
 ```
-**Note**: You can use the option `--dryRun` to simulate what the command will do intsead of actually doing it.
+**Note**: You can use the option `--dryRun` to simulate what the command will do intsead of actually doing anything.
 
 ## Build the Interaction Model
 
-We will now write an interaction model for our skill in the `serverless.yml` file, as shown below:
+Let's add the interaction model for our skill in the `serverless.yml` file, as shown below:
 
 ```
         ...
@@ -158,7 +148,6 @@ We will now write an interaction model for our skill in the `serverless.yml` fil
                   - name: AMAZON.StopIntent
                     samples: []
 ```
-For details, check out the [full specs](https://developer.amazon.com/docs/custom-skills/custom-interaction-model-reference.html) for the interaction model.
 
 We will update the skill again by running:
 
@@ -166,7 +155,7 @@ We will update the skill again by running:
 $ sls alexa update
 ```
 
-## Lamda Functions for the Intents
+## Lambda Functions for the Intents
 
 Before we go any further, we need to write our Lambda function handlers for our skill intents in the `index.js` file. Once we are done with that we need to reference those Lambda functions in the `serverless.yml` file as shown below:
 
@@ -216,9 +205,9 @@ functions:
   meetupHandler: sls-meetup-alexa-skill-dev-meetupHandler
 ```
 
-That was easy!!! No clicking through AWS screens to deploy your Lambda functions.
+That was easy!!! No clicking through AWS console screens to deploy your Lambda functions.
 
-**Note**: For some reason (still investigating), the ARN does not get printed under the `endpoints` in the output above. So, go to the [AWS Lambda service](https://console.aws.amazon.com/lambda/) and search for the Lambda function `sls-meetup-alexa-skill-dev-meetuphandler`. On the top-right corner of the screen, you will see the ARN. 
+Now, we need to get ARN for the Lambda function we just deployed. Go to the [AWS Lambda service](https://console.aws.amazon.com/lambda/) and search for the Lambda function `sls-meetup-alexa-skill-dev-meetupHandler`. On the top-right corner of the screen, you will see the ARN. 
 
 Grab the ARN and add it to the `manifest` section of the `serverless.yml` file, as shown below:
 
@@ -227,9 +216,10 @@ Grab the ARN and add it to the `manifest` section of the `serverless.yml` file, 
           apis:
             custom:
               endpoint:
-                uri: arn:aws:lambda:region:account_id:function:sls-meetup-alexa-skill-dev-meetupHandler
+                uri: arn:aws:lambda:<AWS Region>:<AWS Account ID>:function:sls-meetup-alexa-skill-dev-meetupHandler
 ...
 ```
+**Note:** Replace the `<AWS Region>` and `<AWS Account ID>` with real values for your AWS account.
 
 ## Build the Skill
 
@@ -276,9 +266,9 @@ interactionModel:
         samples: []
 ```
 
-## Preview the Skill on Alexa Developer Console
+## Preview the Skill
 
-Let's see what we have achieved so far. We have create a Alexa skill named MeetupEvents.
+Let's see what we have achieved so far. We have create a Alexa skill named MeetupEvents. Let's preview the skill we created on the Alexa Developer Console.
 
 ![image](https://user-images.githubusercontent.com/8188/44305288-fa291c00-a341-11e8-9dfa-cecaa83579e1.png)
 
@@ -292,13 +282,15 @@ And, the MeetupIntent utterances are populated as well:
 
 ## Test the Skill
 
-First enable testing for the skill.
+First enable testing for the skill. We will be using the Alexa Simulator to test our skill.
 
 We start by typing **meetup events**, and we hear the welcome response.
 
 Then, we type in **my events**, and we hear the list of events.
 
 ![image](https://user-images.githubusercontent.com/8188/44305392-3bbac680-a344-11e8-9660-114e70c02f39.png)
+
+And, we have a working Alexa Skill that speaks out the latest meetup events.
 
 ## Logs
 
@@ -316,7 +308,7 @@ You can delete the Alexa skill, by:
 $ sls alexa delete --id <skill_id>
 ```
 
-and, you can also cleanup the Lambda function deployment frm AWS, by:
+and, you can also cleanup the Lambda function deploys to AWS, by:
 
 ```
 $ sls remove
