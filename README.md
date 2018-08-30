@@ -2,6 +2,8 @@
 
 A simple Alexa skill to get meetup information, built using the Serverless Framework and the [serverless-alexa-skills](https://github.com/marcy-terui/serverless-alexa-skills) plugin.
 
+This project is a companion for the post [How to build a Serverless Alexa Skill](https://rupakganguly.com/posts/how-to-build-a-serverless-alexa-skill/).
+
 ## Create the project
 
 ```
